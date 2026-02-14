@@ -21,7 +21,7 @@ describe("/boards", () => {
     );
   });
 
-  it("happy path: signed-in user sees boards list", () => {
+  it("happy path: signed-in user sees boards list and create button", () => {
     cy.intercept("GET", `${apiBase}/organizations/me/member*`, {
       statusCode: 200,
       body: {
@@ -52,9 +52,7 @@ describe("/boards", () => {
 
     cy.intercept("GET", `${apiBase}/organizations/me/list*`, {
       statusCode: 200,
-      body: [
-        { id: "o1", name: "Personal", role: "owner", is_active: true },
-      ],
+      body: [{ id: "o1", name: "Personal", role: "owner", is_active: true }],
     }).as("organizations");
 
     cy.intercept("GET", `${apiBase}/boards*`, {
@@ -98,5 +96,6 @@ describe("/boards", () => {
 
     cy.contains(/boards/i).should("be.visible");
     cy.contains("Demo Board").should("be.visible");
+    cy.contains("a", /create board/i).should("be.visible");
   });
 });
